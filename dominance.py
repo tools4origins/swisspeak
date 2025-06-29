@@ -110,9 +110,6 @@ def write_ascii_matrix(filepath, matrix_data, ncols, nrows, nodata_value):
         print(f"An error occurred while writing the file to '{filepath}': {e}")
         exit(1)
 
-def manhattan_distance(p1, p2):
-    return abs(p2[0] - p1[0]) + abs(p2[1] - p1[1])
-
 def euclidean_distance(p1, p2):
     """
     Calculates the Euclidean distance between two 2D points (row, col).
@@ -227,7 +224,6 @@ def adapt_value_based_on_dominance(matrix_data, r, c, nodata_value, peak_row, pe
 
     # Case 3: Valid data cell (not the peak)
     dist_to_peak = euclidean_distance((r, c), (peak_row, peak_col))
-    manhattan_sup = math.ceil(dist_to_peak)
 
     # If there are no higher border cells, then this cell is dominated
     if not higher_border_cells:
@@ -235,12 +231,6 @@ def adapt_value_based_on_dominance(matrix_data, r, c, nodata_value, peak_row, pe
 
     # Iterate through the higher border cells to check for violating conditions
     for br, bc in higher_border_cells:
-        man_dist_to_border_cell = manhattan_distance((r, c), (br, bc))
-        # print(f'{r=}, {c=} vs {br=}, {bc=}, {manhattan_sup}')
-        if man_dist_to_border_cell > manhattan_sup:
-            #print('skip')
-            continue
-        
         dist_to_border_cell = euclidean_distance((r, c), (br, bc))
         
         # If a higher border cell is found closer than the peak,
